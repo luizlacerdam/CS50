@@ -1,2 +1,0 @@
-# CS50
-Personal CS50 2022 LABs and PROBLEMS SETS.
