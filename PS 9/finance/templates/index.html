@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+<main class="container py-5 text-center">
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Symbol</th>
+                <th class="text-start">Name</th>
+                <th class="text-end">Shares</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">TOTAL</th>
+            </tr>
+        </thead>
+       <tbody>
+                {% set totalsum = [] %}
+                {% for row in rows %}
+                {% if row["share_balance"] > 0%}
+                <tr>
+                    <td class="text-start">{{ row["symbol"] }}</td>
+                    <td class="text-start">{{ lookup(row["symbol"]).name }}</td>
+                    <!-- share_balance -->
+                    <td class="text-end">{{ row["share_balance"] }}</td>
+                    <!-- PRICE -->
+                    <td class="text-end">{{ lookup(row["symbol"]).price | usd}}</td>
+                    <!-- TOTAL -->
+                    {% set sumer = lookup(row["symbol"]).price * row["share_balance"] %}
+                    <td class="text-end">{{ sumer | usd}}</td>
+                </tr>
+                {% set totalsum = totalsum.append(sumer) %}
+                {% endif %}
+                {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="4">Cash</td>
+                <td class="border-0 text-end">{{ cash[0].cash | usd}}</td>
+            </tr>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="4">TOTAL</td>
+                <td class="border-0 w-bold text-end">{{ (cash[0].cash + sum(totalsum)) | usd}}</td>
+
+            </tr>
+        </tfoot>
+    </table>
+
+        </main>
+{% endblock %}
