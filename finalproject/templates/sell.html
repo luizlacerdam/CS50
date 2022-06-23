@@ -1,0 +1,229 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Log In
+{% endblock %}
+
+{% block main %}
+<script>
+  const binanceWS = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade/ethusdt@trade/ethbtc@trade");
+
+  let stockPrice = null;
+  let text = null;
+  let lastPrice = null;
+  binanceWS.onmessage = function (event) {
+    let stockObject = JSON.parse(event.data);
+
+    let symbol = stockObject.s;
+    let n = null;
+
+    switch (symbol) {
+      case "BTCUSDT":
+        text = "binance-btcusdt";
+        n = 2;
+        break;
+      case "ETHUSDT":
+        text = "binance-ethusdt";
+        n = 2;
+        break;
+      case "ETHBTC":
+        text = "binance-ethbtc";
+        n = 5;
+        break;
+    }
+    let price = parseFloat(stockObject.p).toFixed(n);
+
+    stockPrice = document.getElementById(text);
+    if(!stockPrice){
+      return;
+    }
+    stockPrice.innerText = price;
+
+    stockPrice.style.color = !lastPrice || lastPrice === price ? "black" : price > lastPrice ? "green" : "red";
+    lastPrice = price
+  }
+  /////////////////COINBASE///////////////////
+  const coinbaseWS = new WebSocket("wss://ws-feed.exchange.coinbase.com/products/BTC-USDT/ticker");
+
+  let coinrequest = {     "type": "subscribe",     "product_ids": [               "BTC-USD", "ETH-USD","ETH-BTC"     ],     "channels": ["ticker"] };
+
+
+  // Connection opened
+  coinbaseWS.addEventListener('open', function (event) {
+    console.log('Successfully connected to Coinbase Websocket API!');
+    coinbaseWS.send(JSON.stringify(coinrequest));
+  });
+
+  // Listen for messages
+  coinbaseWS.addEventListener('message', function (event) {
+    let priceData = JSON.parse(event.data);
+
+    switch (priceData.product_id) {
+      case "BTC-USD":
+        text = "coinbase-btcusdt";
+        break;
+      case "ETH-USD":
+        text = "coinbase-ethusdt";
+        break;
+      case "ETH-BTC":
+        text = "coinbase-ethbtc";
+        break;
+    }
+
+    stockPrice = document.getElementById(text);
+    if(!stockPrice){
+      return;
+    }
+
+    stockPrice.innerText = priceData.price;
+    hiddenValue = document.getElementById("coinbase-price")
+    hiddenValue.value = priceData.price
+
+    stockPrice.style.color = !lastPrice || lastPrice === priceData.price ? "black" : priceData.price > lastPrice ? "green" : "red";
+    lastPrice = priceData.price;
+
+  });
+
+function getPairValue() {
+  var getFirstPair = document.getElementById("firstpair").value;
+  var getSecPair = document.getElementById("secpair").value;
+  var firstPairTitle = document.getElementById("firstpairtitle");
+  var secPairTitle = document.getElementById("secpairtitle");
+  ////////////////////
+  switch (getFirstPair) {
+    case "BTC/USDT":
+      document.getElementsByClassName("first-price")[0].id = "binance-btcusdt";
+      firstPairTitle.innerText = "BTC/USDT";
+      break;
+    case "ETH/USDT":
+      document.getElementsByClassName("first-price")[0].id = "binance-ethusdt";
+      firstPairTitle.innerText = "ETH/USDT";
+      break;
+    case "ETH/BTC":
+      document.getElementsByClassName("first-price")[0].id = "binance-ethbtc";
+      firstPairTitle.innerText = "ETH/BTC";
+      break;
+  }
+
+  secPairTitle.innerText = getSecPair;
+
+
+  switch (getSecPair) {
+    case "BTC/USD":
+      document.getElementsByClassName("sec-price")[0].id = "coinbase-btcusdt";
+      break;
+    case "ETH/USD":
+      document.getElementsByClassName("sec-price")[0].id = "coinbase-ethusdt";
+      break;
+    case "ETH/BTC":
+      document.getElementsByClassName("sec-price")[0].id = "coinbase-ethbtc";
+      break;
+  }
+
+}
+
+//binance's list of dics balance...
+var list = {{account_spot.balances | safe}};
+balanceBTC = list[1].free;
+balanceETH = list[3].free;
+balanceUSDT = list[6].free;
+
+</script>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="card text-bg-warning mb-3" style="max-width: 13rem;">
+        <div class="card-header" id="binance-card-header">
+          <h3 id="firstexchangetitle">BINANCE</h3>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" id="firstpairtitle">BTC/USDT</h5>
+          <p class="card-text">
+          <h3 id="binance-btcusdt" class="first-price">---</h3>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <form action="/sell-binance" method="post">
+      <div class="row">
+        <div class="form-floating">
+          <select class="form-select" id="firstpair" name="binance-symbol" aria-label="Floating label select example" onchange="getPairValue();">
+            <option selected value="BTC/USDT">BTC/USDT</option>
+            <option value="ETH/USDT">ETH/USDT</option>
+            <option value="ETH/BTC">ETH/BTC</option>
+          </select>
+          <label for="floatingSelect">PAIR</label>
+        </div>
+      </div>
+      <div class="row">
+          <div class="mb-3">
+            <input required class="form-control mx-auto w-auto" id="binance-amount" name="binance-amount" placeholder="amount"
+              type="text">
+          </div>
+          <button class="btn btn-primary" type="submit">Sell</button>
+        </form>
+      </div>
+    </div>
+    <div class="col">
+
+      <div class="card text-bg-warning mb-3" style="max-width: 13rem;">
+        <div class="card-header" id="coinbase-card-header">
+          <h3>COINBASE</h3>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" id="secpairtitle">BTC/USD</h5>
+          <p class="card-text">
+          <h3 class="sec-price"id="coinbase-btcusdt" name="coinbase-price"value="">---</h3>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <form action="/sell-coinbase" method="post">
+      <div class="row">
+        <div class="form-floating">
+          <select class="form-select" name="coinbase-symbol" id="secpair" aria-label="Floating label select example" onchange="getPairValue();">
+            <option selected value="BTC/USD">BTC/USD</option>
+            <option value="ETH/USD">ETH/USD</option>
+            <option value="ETH/BTC">ETH/BTC</option>
+          </select>
+          <label for="floatingSelect">PAIR</label>
+        </div>
+      </div>
+      <div class="row">
+          <div class="mb-3">
+            <input required class="form-control mx-auto w-auto" id="coinbase-amount" name="coinbase-amount" placeholder="amount"
+              type="text">
+          </div>
+          <div class="mb-3">
+            <input hidden class="form-control mx-auto w-auto" id="coinbase-price" name="coinbase-price" type="text">
+          </div>
+          <button class="btn btn-primary" type="submit">Sell</button>
+      </div>
+    </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">BALANCE</h5>
+          <p class="card-text">BTC: {{account_spot.balances[1].free}} ETH: {{account_spot.balances[3].free}}</p>
+          <p class="card-text">USDT: {{float(account_spot.balances[6].free) | usd}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">BALANCE</h5>
+          <p class="card-text">BTC: {{float(account_coinbase[1].balance)}} ETH: {{float(account_coinbase[2].balance)}}</p>
+          <p class="card-text">USD: {{float(account_coinbase[6].balance) | usd}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

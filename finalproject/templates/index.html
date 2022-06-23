@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+  <div class="row">
+    <h3>{{text}}</h3>
+  </div>
+  <div class="row">
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{bar}}%"></div>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col">
+      <h1>BINANCE API SETUP</h1>
+    </div>
+  <div class="col">
+    <h1>COINBASE API SETUP</h1>
+  </div>
+  <div class="row">
+    <div class="col">
+      <form action="/index" method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">PUBLIC API KEY</label>
+          <input autocomplete="off" placeholder="{{resultb}}"autofocus required type="text" class="form-control" id="binance-public" name="binance-public" aria-describedby="emailHelp">
+          <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">SECRET API KEY</label>
+          <input placeholder="{{resultbsec}}"required type="password" class="form-control" id="binance-secret" name="binance-secret">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <div class="col">
+      <form action="/index" method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">PUBLIC API KEY</label>
+          <input placeholder="{{resultc}}" autocomplete="off" autofocus required type="text" class="form-control" id="coinbase-public" name="coinbase-public" aria-describedby="emailHelp">
+          <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">SECRET API KEY</label>
+          <input placeholder="{{resultcsec}}" required type="password" class="form-control" id="coinbase-secret" name="coinbase-secret">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">PASSPHRASE</label>
+          <input placeholder="{{resultcpass}}" required type="password" class="form-control" id="coinbase-pass" name="coinbase-pass">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

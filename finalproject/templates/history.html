@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="card text-bg-warning mb-3">
+        <div class="card-header" id="binance-card-header">
+          <h3 id="firstexchangetitle">BINANCE</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-bg-warning mb-3">
+        <div class="card-header" id="coinbase-card-header">
+          <h3 id="firstexchangetitle">COINBASE</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">PAIR</th>
+          <th scope="col">TYPE</th>
+          <th scope="col">PRICE</th>
+          <th scope="col">QTY</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for order in trades %}
+        <tr>
+
+          <th scope="row">{{order.symbol}}</th>
+          {% if order.isBuyer == True %}
+          <td>BUY</td>
+          {% else %}
+          <td>SELL</td>
+          {% endif %}
+          <td>{{float(order.price) | usd}}</td>
+          <td>{{order.qty}}</td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">PAIR</th>
+          <th scope="col">TYPE</th>
+          <th scope="col">PRICE</th>
+          <th scope="col">QTY</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for order in coinbase_orders %}
+        <tr>
+          <th scope="row">{{order.product_id}}</th>
+          <td style="text-transform: uppercase;">{{order.side}}</td>
+          <td>{{float(order.price) | usd}}</td>
+          <td>{{order.size}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Log In
+{% endblock %}
+
+{% block main %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <h1 class="fw-bold text-start">THE PLACE TO FIND OUT WHERE TO BUY CHEAPEST CRYPTO.</h1>
+            <h4 class="text-start">Totally integrated with API of the major exchenges
+                worldwide. Totally safe and legit.</h4>
+            <p></p>
+            <form class="row g-3" action="/register" method="get">
+                <div class="col-auto">
+                    <div class="mb-3">
+                        <input class="form-control mx-auto w-auto" type="email" id="email" name="email" placeholder="E-mail">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button class="btn" style="margin: 10px;" id="register" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+        <div class="col">
+
+                <div class="container-fluid">
+                    <div class="card text-bg-warning mb-3" style="max-width: 13rem;">
+                        <div class="card-header" id="binance-card-header">
+                            <h3>BINANCE</h3>
+                        </div>
+                        <div class="card-body">
+                    <div id="carouselExampleControls" class="carousel slide carousel-dark" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- CAROUSEL ITENS -->
+                            <div class="carousel-item active">
+
+
+                                            <h5 class="card-title">BTC/USDT</h5>
+                                            <p class="card-text">
+                                            <h3 id="binance-btcusdt">---</h3>
+                                            </p>
+
+
+                            </div>
+                            <div class="carousel-item">
+
+
+
+                                            <h5 class="card-title">ETH/USDT</h5>
+                                            <p class="card-text">
+                                            <h3 id="binance-ethusdt">---</h3>
+                                            </p>
+
+
+
+                            </div>
+                            <div class="carousel-item">
+
+
+
+                                            <h5 class="card-title">ETH/BTC</h5>
+                                            <p class="card-text">
+                                            <h3 id="binance-ethbtc">---</h3>
+                                            </p>
+
+
+
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+                </div>
+
+
+        </div>
+        <div class="col">
+            <div class="container-fluid">
+                <div class="card text-bg-warning mb-3" style="max-width: 13rem;">
+                    <div class="card-header" id="coinbase-card-header">
+                        <h3>COINBASE</h3>
+                    </div>
+                    <div class="card-body">
+                <div id="carouselExampleControls2" class="carousel slide carousel-dark" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <!-- CAROUSEL ITENS -->
+                        <div class="carousel-item active">
+
+
+                                        <h5 class="card-title">BTC/USD</h5>
+                                        <p class="card-text">
+                                        <h3 id="coinbase-btcusdt">---</h3>
+                                        </p>
+
+
+                        </div>
+                        <div class="carousel-item">
+
+
+
+                                        <h5 class="card-title">ETH/USD</h5>
+                                        <p class="card-text">
+                                        <h3 id="coinbase-ethusdt">---</h3>
+                                        </p>
+
+
+
+                        </div>
+                        <div class="carousel-item">
+
+
+
+                                        <h5 class="card-title">ETH/BTC</h5>
+                                        <p class="card-text">
+                                        <h3 id="coinbase-ethbtc">---</h3>
+                                        </p>
+
+
+
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls2"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls2"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+        <script>
+            const binanceWS = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade/ethusdt@trade/ethbtc@trade");
+
+            let stockPrice = null;
+            let text = null;
+            let lastPrice = null;
+            binanceWS.onmessage = function (event) {
+                let stockObject = JSON.parse(event.data);
+
+                let symbol = stockObject.s;
+                let n = null;
+
+                switch(symbol) {
+                    case "BTCUSDT":
+                        text = "binance-btcusdt";
+                        n = 2;
+                        break;
+                    case "ETHUSDT":
+                        text = "binance-ethusdt";
+                        n = 2;
+                        break;
+                    case "ETHBTC":
+                        text = "binance-ethbtc";
+                        n = 5;
+                        break;
+                }
+                let price = parseFloat(stockObject.p).toFixed(n);
+                stockPrice = document.getElementById(text);
+                stockPrice.innerText = price;
+
+                stockPrice.style.color = !lastPrice || lastPrice === price ? "black" : price > lastPrice ? "green" : "red";
+                lastPrice = price
+            }
+/////////////////COINBASE///////////////////
+            const coinbaseWS = new WebSocket("wss://ws-feed.exchange.coinbase.com/products/BTC-USDT/ticker");
+
+            let coinrequest = {     "type": "subscribe",     "product_ids": [               "BTC-USD", "ETH-USD","ETH-BTC"     ],     "channels": ["ticker"] };
+
+            // Connection opened
+            coinbaseWS.addEventListener('open', function (event) {
+                console.log('Successfully connected to Coinbase Websocket API!');
+                coinbaseWS.send(JSON.stringify(coinrequest));
+            });
+
+            // Listen for messages
+            coinbaseWS.addEventListener('message', function (event) {
+                let priceData = JSON.parse(event.data);
+
+
+                switch(priceData.product_id) {
+                case "BTC-USD":
+                    text = "coinbase-btcusdt";
+                    break;
+                case "ETH-USD":
+                    text = "coinbase-ethusdt";
+                    break;
+                case "ETH-BTC":
+                    text = "coinbase-ethbtc";
+                    break;
+                }
+
+                stockPrice = document.getElementById(text);
+                stockPrice.innerText = priceData.price;
+
+                stockPrice.style.color = !lastPrice || lastPrice === priceData.price ? "black" : priceData.price > lastPrice ? "green" : "red";
+                lastPrice = priceData.price;
+
+            });
+            // const bittirex_url = "https://api.bittrex.com/v3/markets/BTC-USDT/ticker";
+            //     async function getISS() {
+            //     const response = await fetch(bittirex_url);
+            //     const data = await response.json();
+            //     let symbol = data.symbol;
+            //     let price = data.lastTradeRate;
+
+            //     if (symbol == "BTC-USDT")
+            //         text = "bittrex-btcusdt"
+            //     stockPrice = document.getElementById(text);
+            //     stockPrice.innerText = price
+
+            //     stockPrice.style.color = !lastPrice || lastPrice === price ? "black" : price > lastPrice ? "green" : "red";
+            //     lastPrice = price
+
+            //     console.log(price)
+
+            // }
+            // getISS();
+
+
+
+
+        </script>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+
+{% endblock %}
+
+{% block main %}
+
+
+    <form action="/register" method="post">
+        <div class="mb-3">
+
+            <input required autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="E-mail" value="" type="email" min="4" max="32">
+
+        </div>
+        <div class="mb-3">
+            <input required class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password" min="6" max="32">
+        </div>
+        <div class="mb-3">
+            <input required required class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm Password" type="password" min="6" max="32">
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+<script>
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+    var sn = getParameterByName("email");
+
+    document.getElementById("email").value = sn;
+
+</script>
+{% endblock %}
