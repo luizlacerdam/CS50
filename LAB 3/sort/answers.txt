@@ -1,0 +1,11 @@
+sort1 uses: Bubble Sort
+
+How do you know?: in the best condition, sorted, it takes O n time and there is no swap necessery
+
+sort2 uses: Merge sort
+
+How do you know?: way fast algoritm to sort random 50000 for the O log n
+
+sort3 uses: Selection Sort
+
+How do you know?: take more time then bubble sort in the best condition of sorted.

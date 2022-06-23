@@ -1,0 +1,1 @@
+SELECT SUM(energy) / COUNT(energy) AS avarage FROM songs WHERE artist_id IN (SELECT id FROM artists WHERE name = "Drake");

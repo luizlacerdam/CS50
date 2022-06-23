@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+        <script>
+
+    document.addEventListener("DOMContentLoaded", function listen() {
+
+            let trully = document.querySelector(".trully");
+
+            trully.addEventListener("click", function() {
+                trully.style.backgroundColor = "green";
+                document.querySelector("#feed1").innerHTML = "Correct!";
+            });
+
+            let wrong = document.querySelectorAll(".wrong");
+            for (let i = 0; i < wrong.length; i++) {
+                wrong[i].addEventListener("click", function() {
+                    //console.log("hi");
+                    wrong[i].style.backgroundColor = "red";
+                    document.querySelector("#feed1").innerHTML = "Incorrect!";
+                    });
+                }
+        document.querySelector("#check").addEventListener("click", function() {
+            let input = document.querySelector("#input")
+            if (input.value === "July") {
+                input.style.backgroundColor = "green";
+                document.querySelector("#feed2").innerHTML = "Correct!";
+            } else {
+                input.style.backgroundColor = "red";
+                document.querySelector("#feed2").innerHTML = "Incorrect";
+            }
+        })
+    });
+
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                    <h3>
+                        What color Napoleon Bonaparte's white horse?
+                    </h3>
+                                <ul>
+                                <button class="wrong">Brown</button>
+                                <button class="wrong">Black</button>
+                                <button class="wrong">Yellow</button>
+                                <button class="trully">White</button>
+                                <button class="wrong">Red</button>
+                                <p id="feed1"></p>
+                                </ul>
+
+
+
+
+
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+
+                <h3>What month America greets indepence?</h3>
+                <input id="input" type="text"></input>
+                <button id="check">Check answer</button>
+
+                <p id="feed2"></p>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>

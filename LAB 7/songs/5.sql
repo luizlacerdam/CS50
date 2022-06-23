@@ -1,0 +1,1 @@
+SELECT SUM(energy) / COUNT(energy) AS avarage FROM songs;
