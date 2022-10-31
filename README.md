@@ -3,7 +3,7 @@
 ## [Check out my certification](https://certificates.cs50.io/5da03561-aeeb-4892-9bff-ca67dd25ad84.pdf):
   ![cs50 cert](./cs50.png)
 
-##[Check out my finalproject](https://github.com/luizlacerdam/CS50/tree/main/finalproject) 
+## [Check out my finalproject](https://github.com/luizlacerdam/CS50/tree/main/finalproject) 
 
 #
 Introduction to Computer Science from Harvard, better known as CS50, is the largest course on the Harvard campus and more than 2,000,000 learners worldwide have registered for the course on edX. We are excited to offer a series of introductory CS50 courses and Professional Certificate programs from Harvard that are open to learners of all backgrounds looking to explore computer science, mobile app and game development, business technologies, and the art of programming.
